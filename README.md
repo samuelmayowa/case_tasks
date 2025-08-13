@@ -21,8 +21,8 @@
 - Validation with **Zod**.
 - Model: `Task` with fields: `title`, `description?`, `status: 'todo'|'in_progress'|'done'`, `dueDate`, timestamps.
 - Error handling returns JSON with `error.code` and `error.message`.
-- **OpenAPI** JSON available at `/openapi.json` and rendered by Swagger UI at `/docs`.
-- Tests: `tests/tasks.smoke.test.cjs` (kept minimal to avoid heavy spinning in this environment).
+- **ActiveAPI** JSON available at `/activeapi.json` and rendered by Swagger UI at `/docs`.
+- Tests: `tests/tasks.smoke.test.cjs`
 
 ## Frontend
 
