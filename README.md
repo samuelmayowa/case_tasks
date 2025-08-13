@@ -85,3 +85,7 @@ npm test
 cd backend
 npm run test:e2e
 ```
+```bash
+quck note for setting up .env, I use Mongo DB so tester could do: 
+Connecting via vscode: mongodb+srv://<mongodb_username>:<db_password_encoded>@cluster0.ckx904t.mongodb.net/
+```
