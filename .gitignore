@@ -1,0 +1,32 @@
+# Node / build
+node_modules/
+**/node_modules/
+dist/
+coverage/
+*.log
+*.tsbuildinfo
+
+# Env
+.env
+.env.*
+!.env.example
+
+# OS/IDE
+.DS_Store
+.vscode/
+.idea/
+
+# Yarn 3 (Berry) – keep releases/plugins/sdks, ignore cache
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+.pnp.cjs
+.pnp.loader.mjs
+.pnp.data.json
+
+# Docker
+mongo_data/
+**/.cache/

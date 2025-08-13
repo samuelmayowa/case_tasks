@@ -1,0 +1,95 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Tasks API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/tasks": {
+      "get": {
+        "summary": "List tasks",
+        "responses": {
+          "200": { "description": "OK" }
+        }
+      },
+      "post": {
+        "summary": "Create task",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["title", "dueDate"],
+                "properties": {
+                  "title": { "type": "string", "description": "Short task title" },
+                  "description": { "type": "string", "description": "Optional details" },
+                  "status": { "type": "string", "enum": ["todo", "in_progress", "done"], "description": "Defaults to 'todo' if omitted" },
+                  "dueDate": { "type": "string", "format": "date-time", "description": "ISO 8601 date/time" }
+                }
+              },
+              "example": {
+                "title": "Review case C654321",
+                "description": "Check evidence bundle",
+                "status": "in_progress",
+                "dueDate": "2025-12-31T09:00:00Z"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Created" }
+        }
+      }
+    },
+    "/api/tasks/{id}": {
+      "get": {
+        "summary": "Get task",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Not found" }
+        }
+      },
+      "delete": {
+        "summary": "Delete task",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "204": { "description": "No Content" },
+          "404": { "description": "Not found" }
+        }
+      }
+    },
+    "/api/tasks/{id}/status": {
+      "patch": {
+        "summary": "Update status",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["status"],
+                "properties": {
+                  "status": { "type": "string", "enum": ["todo", "in_progress", "done"] }
+                }
+              },
+              "example": { "status": "done" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Not found" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,79 @@
+{% extends "template.njk" %}
+{% block pageTitle %}Tasks{% endblock %}
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">Tasks</h1>
+      <form class="govuk-form-group" method="post" action="/tasks">
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="title">Title</label>
+          <input class="govuk-input" id="title" name="title" type="text" required/>
+        </div>
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="description">Description</label>
+          <textarea class="govuk-textarea" id="description" name="description"></textarea>
+        </div>
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="dueDate">Due date/time</label>
+          <input class="govuk-input" id="dueDate" name="dueDate" type="datetime-local" required/>
+        </div>
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="status">Status</label>
+          <select class="govuk-select" id="status" name="status">
+            <option value="todo">To do</option>
+            <option value="in_progress">In progress</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
+        <button class="govuk-button" type="submit" data-module="govuk-button">Create task</button>
+      </form>
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible"/>
+      <h2 class="govuk-heading-m">All tasks</h2>
+      {% if tasks and tasks.length %}
+        <ul class="govuk-list govuk-list--spaced">
+          {% for t in tasks %}
+            <li class="govuk-!-margin-bottom-5">
+              <strong class="govuk-heading-s govuk-!-margin-bottom-1">{{ t.title }}</strong>
+              <p class="govuk-hint govuk-!-margin-bottom-2">{{ t.description or '' }}</p>
+              {# Status tag with GOV.UK colour mapping #}
+              {% set tagClass = 'govuk-tag' %}
+              {% if t.status == 'todo' %}
+                {% set tagClass = 'govuk-tag govuk-tag--grey' %}
+              {% endif %}
+              {% if t.status == 'in_progress' %}
+                {% set tagClass = 'govuk-tag govuk-tag--blue' %}
+              {% endif %}
+              {% if t.status == 'done' %}
+                {% set tagClass = 'govuk-tag govuk-tag--green' %}
+              {% endif %}
+              <strong class="{{ tagClass }} govuk-!-margin-right-2">{{ t.status | upper }}</strong>
+              <span class="govuk-hint">Due: {{ t.dueDate }}</span>
+              <div class="govuk-!-margin-top-2">
+                <form method="post" action="/tasks/{{ t._id }}/status" class="govuk-!-display-inline-block govuk-!-margin-right-2">
+                  <div class="govuk-form-group govuk-!-margin-bottom-0">
+                    <label class="govuk-visually-hidden" for="status-{{ t._id }}">Update status</label>
+                    <select id="status-{{ t._id }}" name="status" class="govuk-select govuk-!-margin-right-2">
+                      <option value="todo" {{ 'selected' if t.status=='todo' }}>To do</option>
+                      <option value="in_progress" {{ 'selected' if t.status=='in_progress' }}>In progress</option>
+                      <option value="done" {{ 'selected' if t.status=='done' }}>Done</option>
+                    </select>
+                    <div class="govuk-button-group">
+                      <button class="govuk-button govuk-button--secondary" data-module="govuk-button">Update</button>
+                    </div>
+                  </div>
+                </form>
+                <form method="post" action="/tasks/{{ t._id }}/delete" class="govuk-!-display-inline-block">
+                  <div class="govuk-button-group">
+                    <button class="govuk-button govuk-button--warning" data-module="govuk-button">Delete</button>
+                  </div>
+                </form>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="govuk-body">No tasks yet.</p>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

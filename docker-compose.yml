@@ -1,0 +1,27 @@
+services:
+  mongo:
+    image: mongo:6
+    # ports: ["27017:27017"]
+    volumes: ["mongo:/data/db"]
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      MONGO_URL: mongodb://mongo:27017/tasksdb
+      PORT: 4000
+    ports: ["4000:4000"]
+    depends_on: [mongo]
+
+  frontend:
+    build:
+      context: ./frontend
+    environment:
+      API_BASE_URL: http://backend:4000
+      PORT: 3100
+    ports: ["3100:3100"]
+    depends_on: [backend]
+
+volumes:
+  mongo:
